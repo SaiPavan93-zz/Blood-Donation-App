@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+  <head>
+     <title>CordovaApp</title>
+
+    <meta charset="utf-8">
+	 <!-- //<meta http-equiv="Content-Security-Policy" content="script-src 'self' https://maps.googleapis.com/ https://maps.gstatic.com/ https://mts0.googleapis.com/ 'unsafe-inline' 'unsafe-eval'"> -->
+     
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style1.css" />
+    <!-- <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8"> -->
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+      
+      #map {
+        height: 100%;
+      }
+      
+      html, body {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			}
+	  .btn {
+				background-color: DodgerBlue;
+				border: none;
+				color: white;
+				padding: 12px 14px;
+				font-size: 12px;
+				cursor: pointer;
+			}
+		/* Darker background on mouse-over */
+		.btn:hover {
+			background-color: RoyalBlue;
+		}
+    </style>
+    <script>
+
+    var x = document.getElementById("demo");
+   var marker,marker1;
+    function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(initMap);
+    } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+      
+      var map;
+      var infowindow;
+      var places=[];
+      var places1=[];
+    var mcenter;
+      function initMap(position) {
+        // var directionsService = new google.maps.DirectionsService;
+     // var directionsDisplay = new google.maps.DirectionsRenderer;
+         var lat = position.coords.latitude;
+         //window.alert(lat);
+	    var lon = position.coords.longitude;
+        mcenter = new google.maps.LatLng(lat,lon);
+        
+        var options={center: mcenter, zoom:15};
+        infowindow1 = new google.maps.InfoWindow();
+         map = new google.maps.Map(document.getElementById('map'),options);
+        // directionsDisplay.setMap(map);
+          marker1 = new  google.maps.Marker({position:mcenter,map:map,title:"You are here!"});
+        
+         google.maps.event.addListener(marker1, 'click', function() {
+          infowindow1.setContent("You are here!");
+          
+          infowindow1.open(map, this);
+        });
+
+      
+        infowindow = new google.maps.InfoWindow();
+       var service = new google.maps.places.PlacesService(map);
+        service.nearbySearch({
+          location: mcenter,
+          radius: 5000,
+          type: ['hospital']
+        }, callback);
+        //calculateanddisplay(directionsService, directionsDisplay);
+        
+      }
+
+      function callback(results, status) {
+          var directionsService = new google.maps.DirectionsService;
+      var directionsDisplay = new google.maps.DirectionsRenderer;
+      directionsDisplay.setMap(map);
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (var i = 0; i < results.length; i++) {
+         
+            createMarker(results[i]);
+            //Distance(results[i]);
+          }
+        }
+        
+        for (var j=0;j<places.length;j++)
+        {
+        //window.alert(places[j].distance+"  "+places[j].name);
+        places1.push(places[j].distance);
+     
+        //window.alert("second print"+places[j].distance+"  "+places[j].name);
+        }
+        var y=Math.min.apply(null,places1);
+         for (var j=0;j<places.length;j++)
+        {
+        if(y==places[j].distance){
+        //window.alert(places[j].name);
+        document.getElementById("result").innerHTML = places[j].name;
+        document.getElementById("result").value = places[j].name;
+
+        
+        }
+        }
+        
+      }
+
+      function createMarker(place) {
+        //window.alert(place);
+       
+        var placeLoc = place.geometry.location;
+         marker = new google.maps.Marker({
+          map: map,
+        // place :{
+          //placeId: results[0].place_id,
+          position: place.geometry.location
+         // }
+        });
+          Distance(marker,marker1,place);
+        google.maps.event.addListener(marker, 'click', function() {
+       
+          infowindow.setContent(place.name+"   "+place.place_id);
+          
+          infowindow.open(map, this);
+           
+         
+        });
+        }
+        function Distance(marker,marker1,place){
+        //
+        var element={};
+        var lat = marker.getPosition().lat();
+        var lat1 = marker1.getPosition().lat();
+        var lng = marker.getPosition().lng();
+        var lng1 = marker1.getPosition().lng();
+        var R = 6371; // Radius of the earth in km
+        var dLat = deg2rad(lat1-lat);  // deg2rad below
+        var dLon = deg2rad(lng1-lng); 
+        var a= Math.sin(dLat/2) * Math.sin(dLat/2);
+        var dl=deg2rad(lat);
+        var dl1=deg2rad(lat1);
+        var b=Math.sin(dLon/2) * Math.sin(dLon/2);
+        var c=Math.cos(dl) * Math.cos(dl1);
+        var ans=a+c*b;
+        var sol = 2 * Math.atan2(Math.sqrt(ans), Math.sqrt(1-ans));
+       // alert(sol*R+"  "+place.name);
+       element.distance=sol*R;
+       element.name=place.name;
+        places.push(element);
+        
+ }
+    function deg2rad(deg) {
+         return deg * (3.14/180); 
+        }
+        
+    function calc(){
+     var service = new google.maps.places.PlacesService(map);
+        service.nearbySearch({
+          location: mcenter,
+          radius: 5000,
+          type: ['hospital']
+        }, callback1);
+    
+    }
+      function callback1(results, status) {
+          var directionsService = new google.maps.DirectionsService;
+      var directionsDisplay = new google.maps.DirectionsRenderer;
+      directionsDisplay.setMap(map);
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (var i = 0; i < results.length; i++) {
+         
+            createMarker(results[i]);
+            //Distance(results[i]);
+          }
+        }
+        calculateanddisplay(directionsService, directionsDisplay);
+        }
+    function calculateanddisplay(directionsService, directionsDisplay)
+        {
+        var end = document.getElementById('result').value;
+       // alert("In caldis"+" "+marker1.getPosition());
+        directionsService.route({
+          origin: marker1.getPosition(),
+          destination: end,
+          travelMode: 'DRIVING'
+        }, function(response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      
+        }
+        
+        
+      
+    </script>
+    <script>
+$(document).ready(function(){
+    $(".btn").click(function(){
+        $(this).hide();
+    });
+     $(".btn").click(function(){
+        $("#map").show();
+    });
+     $(".btn").click(function(){
+        $("#p").show();
+    });
+    $(".btn").click(function(){
+        $("#bt2").show();
+    });
+});
+</script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  </head>
+  <body>
+   <ul class="cb-slideshow">
+            <li><span>Image 01</span></li> 
+            <li><span>Image 02</span></li>
+            <li><span>Image 03</span></li>
+            <li><span>Image 04</span></li>
+            <li><span>Image 05</span></li>
+			<li><span>Image 06</span></li>
+</ul>
+    <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Search</a>
+    </div>
+	<ul class="nav navbar-nav navbar-right">
+      <li><a href="http://localhost/proj/logout.php"><span class="glyphicon glyphicon-user"></span> Logout</a></li>
+	 </ul>
+	</div>
+	</nav>
+    <div id="piechart"></div>
+     <p id="demo"></p>
+     <p id="d"></p>
+     <p id="d1"></p>
+     <div style="position:relative;">
+     <button class="btn" onclick="getLocation()"><i class="fa fa-search"></i>Find Hospitals</button><br><br></div>
+    <div id="map" style="position: relative;display:none;" onload="getLocation()"></div>
+<div id="p" style="display:none;position:relative;">    
+<p font size="5">
+<b>The nearest Healthcare Unit near you is :</b></font>
+<span id="result" value="a"></span>.</p></div>
+<div style="position:relative;"> <button type="button" class="btn btn-success" id="bt2" style="display:none;" onclick="calc()">Get Directions!!!</button></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5txFEjURCeqB4U0w6vxWV0UVVZS_PlSg&libraries=places&callback=getLocation" async defer></script>
+  
+  </body>
+</html>
