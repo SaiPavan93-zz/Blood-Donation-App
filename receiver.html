@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>CordovaApp</title>
+  
+  
+    <meta charset="utf-8">
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.0.4/popper.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style1.css" />
+</head>
+
+<body>
+    <ul class="cb-slideshow">
+            <li><span>Image 01</span></li> 
+            <li><span>Image 02</span></li>
+            <li><span>Image 03</span></li>
+            <li><span>Image 04</span></li>
+            <li><span>Image 05</span></li>
+			<li><span>Image 06</span></li>
+</ul>
+	<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+    <div class="navbar-header">
+     <a class="navbar-brand" href="#">
+	  Receiver</a>
+    </div>
+	<ul class="nav navbar-nav navbar-right">
+      <li><a href="http://localhost/proj/logout.php"><span class="glyphicon glyphicon-user"></span> Logout</a></li>
+	 </ul>
+	</div>
+	</nav>
+	<div class="container">
+  <div class="panel-group">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+	
+	  Welcome Receiver</div>
+    </div>
+	</div>
+	</div>
+	
+	<form id="myForm" action="http://localhost/proj/receiver.php" method="post">
+	<div style="position: relative;">
+	<div style="margin-left:140px;" id="t1" class="form-group" >
+	<label for="blood1" style="font-size:20px;">How many units of Blood do you need?</label><br>
+    <input type="radio" name="blood1" value="<3" id="y1"> 
+	<label style="font-size:15px;"> <3 </label> <br>
+	<input type="radio"  name="blood1" value="<5" id="n1"> 
+	<label style="font-size:15px;"> <5 </label> <br>
+	<input type="radio"  name="blood1" value="<10" id="m1"> 
+	<label style="font-size:15px;"> <10 </label> <br>
+	</div>
+	
+	<div style="margin-left:140px;display:none" id="t2" class="form-group">
+	<label for="blood2" style="font-size:20px;">Reason for blood Requirement?</label><br>
+    <input type="radio" name="blood2" value="Accident" id="y2"> 
+	<label style="font-size:15px;"> Accident </label> <br>
+	<input type="radio"  name="blood2" value="Pregnancy" id="n2"> 
+	<label style="font-size:15px;"> Pregnancy </label> <br>
+	<input type="radio"  name="blood2" value="Other" id="m2"> 
+	<label style="font-size:15px;"> Other </label> <br>
+	</div>
+	
+	<div class="col-sm-6 col-sm-3" style="margin-left:140px;display:none;" id="t3" class="form-group">
+	<label for="blood3" style="font-size:20px;">Contact Information :</label><br>
+    <label for="email" id="y3" >Email address:</label>
+    <input type="email" class="form-control" name="email" size= "30">
+	<label for="Contact no">Contact no :</label>
+    <input type="tel" class="form-control" name="contact" size= "30">
+	</div>
+	
+	<div class="container" style="margin-left:140px;display:none;" id="t4" >
+  <label for="blood4" style="font-size:20px;">Please select your blood group  	?</label><br>                                      
+
+	<select class="btn btn-primary dropdown-toggle" type="submit" data-toggle="dropdown" class="form-group"  name="blood4" id="y4">
+		<option selected disabled>Blood Group</option>
+		<option value="O+">O+</option>
+		<option value="O-">O-</option>
+		<option value="A+">A+</option>
+		<option value="A-">A-</option>
+		<option value="B+">B+</option>
+		<option value="B-">B-</option>  
+		<option value="AB+">AB+</option>  
+		<option value="AB-">AB-</option>
+	</select>
+   </div>
+   <div class="form-group" style="display:none;">
+   Name: <input type="text"  class="form-control" style="display:none;" name="blood5" value="demo" id="d"><br>
+   </div>
+ 
+   <br>
+   <div class="form-group" style="margin-left:155px;margin-top:150px;display:none;" id="t5">
+    <button type="sub" class="btn btn-success" align = "bottom" >Submit</button>
+    </div>
+	</div>
+	</form>
+	<img src="https://www.disabled-world.com/pics/1/blood-donor-match.png" style="margin-left:400px;"></img>
+	
+	<script>
+	var q=window.location.href
+	var url=new URL(q);
+	var c=url.searchParams.get("username");
+	console.log(c);
+	document.getElementById("d").value = c;
+	</script>
+	<script type="text/javascript" src="js/receiver.js"></script>
+	<script type="text/javascript" src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+	</body>
+
+</html>
+	
